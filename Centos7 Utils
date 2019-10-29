@@ -1,7 +1,7 @@
 clear
 start=$(date +%s.%N)
 echo "===> Incepem actualizarea serverului tau, ($HOSTNAME). <==="
-sleep 3
+sleep 1.5
 echo "===> Verificam daca exista actualizari disponibile <==="
 sleep 1.5
 yum update
@@ -10,11 +10,11 @@ sleep 1.5
 yum upgrade -y
 echo "Actualizarea serverului tau s-a finalizat cu succes."
 PS3='Doresti sa iti instalam pachetul de baza? '
-options=("Da" "Nu" "Iesire")
+options=("Da" "Nu" "Iesire" "Configurare Timezone" "Ajustare Hostname")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Da")
+            "Da")
             echo "--- Deoarece ai ales varianta 1 (DA) iti vom instala urmatoarele elemente de baza: nano, screen, curl, mlocate, wget, sudo."
             sleep 1.5
             echo "Odata ce instalarea s-a efecutat, programul se va inchide automat."
@@ -22,20 +22,18 @@ do
             yum install nano screen curl mlocate wget sudo -y
             echo "Instalarea s-a efectuat cu success. O zi placuta!"
 			end=$(date +%s.%N)    
-runtime=$(python -c "print(${end} - ${start})")
-
-echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+			runtime=$(python -c "print(${end} - ${start})")
+            echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
             break
             ;;
-        "Nu")
+            "Nu")
             echo "Nicio problema! Nu ne vom atinge de niciun alt fisier :)."
 			echo "Utilitarul se va inchide automat. O zi linistita!"
 			end=$(date +%s.%N)    
 			runtime=$(python -c "print(${end} - ${start})")
 			echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
-			break
             ;;
-        "Iesire")
+            "Iesire")
             echo "Iti multumim pentru ca ai ales utilitarul Basic Install CentOS7!"
             sleep 0.5
             echo "O zi frumoasa! :)"
@@ -45,6 +43,32 @@ echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
 			echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
             break
             ;;
+			"Configurare Timezone")
+			echo "Pentru ce zona doresti sa iti actualizam Timezone-ul?:"
+			read -p "Zona: " zone
+            echo "Acum iti vom configura Timezone-ul pentru zona $zone"
+			timedatectl set-timezone $zone
+            sleep 0.5
+            echo "O zi frumoasa! :)"
+            sleep 0.5
+			end=$(date +%s.%N)    
+			runtime=$(python -c "print(${end} - ${start})")
+			echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+            break
+            ;;
+			"Ajustare Hostname")
+			echo "Utilitarul va ajusta acum hostname-ul serverului tau..."
+            sleep 1
+            read -p "Hostname-ul pe care doresti sa il setezi: " hostnametext
+            hostnamectl set-hostname $hostnametext
+            sleep 1.5
+            echo "Hostname-ul tau a fost actualizat cu success. Noul tau hostname este $hostnametext."
+            end=$(date +%s.%N)
+            runtime=$(python -c "print(${end} - ${start})")
+            echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+            break
+            ;;
         *) echo "invalid option $REPLY";;
+
     esac
   done
