@@ -1,0 +1,50 @@
+clear
+start=$(date +%s.%N)
+echo "===> Incepem actualizarea serverului tau, ($HOSTNAME). <==="
+sleep 3
+echo "===> Verificam daca exista actualizari disponibile <==="
+sleep 1.5
+yum update
+echo "===> Aplicam actualizarile disponibile pe server <==="
+sleep 1.5
+yum upgrade -y
+echo "Actualizarea serverului tau s-a finalizat cu succes."
+PS3='Doresti sa iti instalam pachetul de baza? '
+options=("Da" "Nu" "Iesire")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Da")
+            echo "--- Deoarece ai ales varianta 1 (DA) iti vom instala urmatoarele elemente de baza: nano, screen, curl, mlocate, wget, sudo."
+            sleep 1.5
+            echo "Odata ce instalarea s-a efecutat, programul se va inchide automat."
+            sleep 0.9
+            yum install nano screen curl mlocate wget sudo -y
+            echo "Instalarea s-a efectuat cu success. O zi placuta!"
+			end=$(date +%s.%N)    
+runtime=$(python -c "print(${end} - ${start})")
+
+echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+            break
+            ;;
+        "Nu")
+            echo "Nicio problema! Nu ne vom atinge de niciun alt fisier :)."
+			echo "Utilitarul se va inchide automat. O zi linistita!"
+			end=$(date +%s.%N)    
+			runtime=$(python -c "print(${end} - ${start})")
+			echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+			break
+            ;;
+        "Iesire")
+            echo "Iti multumim pentru ca ai ales utilitarul Basic Install CentOS7!"
+            sleep 0.5
+            echo "O zi frumoasa! :)"
+            sleep 0.5
+			end=$(date +%s.%N)    
+			runtime=$(python -c "print(${end} - ${start})")
+			echo "[TIMP TOTAL]: Utilitarul a functionat pentru: $runtime secunde :)."
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+  done
