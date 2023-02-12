@@ -1,0 +1,30 @@
+#! /bin/bash
+
+echo "--> Updating CentOS System <--"
+yum -y update
+echo "--> Update of the CentOS Base System it's now ready! <--"
+echo "--> Starting the Observium Updater Tool v0.1 by RZ <--"
+cd /opt
+mv observium observium_old
+wget -Oobservium-community-latest.tar.gz https://www.observium.org/observium-community-latest.tar.gz
+tar zxvf observium-community-latest.tar.gz
+echo "--> Updater it's at 50% stage, new Observium it's downloaded and ready to be deployed! <--"
+sleep 3
+echo "--> Starting the deployment of the new Observium Package <--"
+sleep 2
+mv /opt/observium_old/rrd observium/
+mv /opt/observium_old/logs observium/
+mv /opt/observium_old/config.php observium/
+echo "--> Updating DB Schema <--"
+sleep 2
+/opt/observium/discovery.php -u
+echo "--> Rediscovery of all devices will begin in 5 seconds <--"
+sleep 5
+echo "--> Staring rediscovery of all devices!!! <--"
+sleep 1
+/opt/observium/discovery.php -h all
+echo "--> OBSERVIUM IT'S NOW RUNNING THE LATEST VERSION AVAILABLE FOR COMMUNITY USE! <--"
+echo "--> Going to purge the old files & clear all the unnecesary stuff <--"
+sleep 2
+rm -rf observium_old
+echo "All done. Thanks for using the Observium Updater Tool v0.1"
